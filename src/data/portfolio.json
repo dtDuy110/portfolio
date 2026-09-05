@@ -1,0 +1,170 @@
+{
+  "demo": true,
+  "identity": {
+    "name": "Your Name",
+    "initials": "YN",
+    "tagline": "Full Stack Developer & Creative Technologist",
+    "intro": "A little curiosity. An endless universe.",
+    "avatar": ""
+  },
+  "workExperience": [
+    {
+      "id": "acme",
+      "company": "Acme Corp",
+      "role": "Senior Frontend Engineer",
+      "period": "2022 — Present",
+      "achievements": [
+        "Led a migration to React 18 across the product platform.",
+        "Reduced the application bundle size by 40%.",
+        "Helped a small team turn ambitious ideas into thoughtful experiences."
+      ],
+      "craterPosition": { "lat": 25, "lng": 50 }
+    },
+    {
+      "id": "beta",
+      "company": "Beta Studio",
+      "role": "Creative Developer",
+      "period": "2020 — 2022",
+      "achievements": [
+        "Built interactive websites for design-led teams.",
+        "Developed a reusable component library and accessible UI patterns."
+      ],
+      "craterPosition": { "lat": -20, "lng": 110 }
+    },
+    {
+      "id": "origin",
+      "company": "First Orbit",
+      "role": "Frontend Developer",
+      "period": "2018 — 2020",
+      "achievements": [
+        "Shipped responsive web experiences from concept to production.",
+        "Collaborated closely with designers and backend engineers."
+      ],
+      "craterPosition": { "lat": 5, "lng": 170 }
+    }
+  ],
+  "projects": [
+    {
+      "id": "spacetracker",
+      "name": "SpaceTracker",
+      "description": "A real-time window into the International Space Station, bringing orbital data to life on an interactive 3D globe.",
+      "stack": ["React", "Three.js", "NASA API"],
+      "github": "",
+      "live": "",
+      "orbitDistance": 1.8,
+      "complexity": 0.8
+    },
+    {
+      "id": "forma",
+      "name": "Forma",
+      "description": "An experimental playground for generative forms, color, and creative coding. Small parameters, surprising possibilities.",
+      "stack": ["WebGL", "GLSL", "JavaScript"],
+      "github": "",
+      "live": "",
+      "orbitDistance": 2.6,
+      "complexity": 0.5
+    },
+    {
+      "id": "fieldnotes",
+      "name": "Field Notes",
+      "description": "A calm place to collect ideas, connect thoughts, and make room for the next unexpected discovery.",
+      "stack": ["Vue", "Node.js", "PostgreSQL"],
+      "github": "",
+      "live": "",
+      "orbitDistance": 3.3,
+      "complexity": 0.6
+    }
+  ],
+  "certifications": [
+    {
+      "id": "aws",
+      "name": "Solutions Architect — Associate",
+      "issuer": "Amazon Web Services",
+      "year": 2023,
+      "ringCategory": "cloud",
+      "badgeUrl": ""
+    },
+    {
+      "id": "google",
+      "name": "Associate Cloud Engineer",
+      "issuer": "Google Cloud",
+      "year": 2024,
+      "ringCategory": "cloud",
+      "badgeUrl": ""
+    },
+    {
+      "id": "security",
+      "name": "Security Fundamentals",
+      "issuer": "Example credential",
+      "year": 2024,
+      "ringCategory": "security",
+      "badgeUrl": ""
+    },
+    {
+      "id": "dev",
+      "name": "JavaScript Developer",
+      "issuer": "Example credential",
+      "year": 2023,
+      "ringCategory": "development",
+      "badgeUrl": ""
+    },
+    {
+      "id": "design",
+      "name": "UX Design Foundations",
+      "issuer": "Example credential",
+      "year": 2022,
+      "ringCategory": "design",
+      "badgeUrl": ""
+    }
+  ],
+  "skills": [
+    {
+      "id": "frontend",
+      "category": "Frontend",
+      "items": ["React", "Vue", "Three.js", "CSS"],
+      "years": 6,
+      "bandColor": "#a4c7ed"
+    },
+    {
+      "id": "backend",
+      "category": "Backend",
+      "items": ["Node.js", "Python", "PostgreSQL"],
+      "years": 4,
+      "bandColor": "#c19acb"
+    },
+    {
+      "id": "devops",
+      "category": "DevOps",
+      "items": ["Docker", "AWS", "CI/CD"],
+      "years": 3,
+      "bandColor": "#d8b2a7"
+    },
+    {
+      "id": "languages",
+      "category": "Languages",
+      "items": ["JavaScript", "TypeScript", "Python", "GLSL"],
+      "years": 6,
+      "bandColor": "#c6b5e8"
+    }
+  ],
+  "about": {
+    "bio": "I'm a developer with a designer's eye and an explorer's curiosity. I enjoy turning complex ideas into simple, useful experiences — and occasionally into little universes.",
+    "note": "Away from the keyboard, you'll find me following the light with a camera, discovering a new trail, or learning something just because.",
+    "interests": [
+      {
+        "id": "photography",
+        "label": "Photography",
+        "lat": 10.8,
+        "lng": 106.6
+      },
+      { "id": "hiking", "label": "Hiking", "lat": 35, "lng": 60 },
+      { "id": "astronomy", "label": "Astronomy", "lat": -20, "lng": 150 }
+    ],
+    "languages": [{ "id": "english", "label": "English", "lat": 51, "lng": 0 }]
+  },
+  "contact": {
+    "email": "",
+    "endpoint": "",
+    "socials": { "github": "", "linkedin": "", "twitter": "" }
+  }
+}

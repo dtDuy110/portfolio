@@ -1,0 +1,21 @@
+{
+  "name": "my-universe",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host 0.0.0.0",
+    "build": "vite build",
+    "preview": "vite preview --host 0.0.0.0",
+    "test": "node --test",
+    "format": "prettier --write src tests index.html package.json vite.config.js README.md"
+  },
+  "dependencies": {
+    "gsap": "^3.13.0",
+    "three": "^0.180.0"
+  },
+  "devDependencies": {
+    "prettier": "^3.9.6",
+    "vite": "^7.1.5"
+  }
+}
