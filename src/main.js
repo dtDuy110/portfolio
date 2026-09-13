@@ -19,6 +19,7 @@ import { CameraController } from "./systems/CameraController.js";
 import { ParticleField } from "./systems/ParticleField.js";
 import { RaycastManager } from "./systems/RaycastManager.js";
 import { ContactLaunchSystem } from "./systems/ContactLaunchSystem.js";
+import { VisitorShip } from "./systems/VisitorShip.js";
 import { LifecycleManager } from "./systems/LifecycleManager.js";
 import { AssetManager } from "./systems/AssetManager.js";
 import { IdentityStar } from "./planets/IdentityStar.js";
@@ -46,6 +47,7 @@ let renderer,
   particles,
   labels,
   launch,
+  visitor,
   star,
   planets = [],
   hidden = document.hidden,
@@ -124,6 +126,7 @@ function selectDestination(id) {
       star.dim(1 - dim.t * 0.7);
     },
   });
+  visitor.visit(selected, selected.id === "neptune" || selected.id === "saturn" ? 1.4 : 1.2);
   controller.fly(selected, () => {
     state.set("focus", id);
     raycaster.disabled = listMode;
@@ -155,6 +158,7 @@ function goBack() {
     p.dim(1);
   });
   star.dim(1);
+  visitor.back();
   controller.back(() => {
     state.set("overview", null);
     orbits.focused = false;
@@ -327,6 +331,7 @@ try {
   particles = new ParticleField(scene, quality);
   controller = new CameraController(camera, canvas, quality);
   launch = new ContactLaunchSystem(scene);
+  visitor = new VisitorShip(scene, quality);
   labels = new LabelManager(planets, camera, selectDestination);
   raycaster = new RaycastManager(canvas, camera, planets, star, {
     select: selectItem,
@@ -372,6 +377,7 @@ try {
     planets.forEach((p) => p.update(elapsed, paused ? 0 : delta));
     star.update(elapsed, paused ? 0 : delta);
     controller.update();
+    visitor.update(delta, !paused);
     scene.updateMatrixWorld(true);
     if (!listMode) raycaster.update();
     particles.update(delta, !paused && !quality.reduced);
