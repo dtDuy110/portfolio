@@ -6,6 +6,8 @@ import noise from "../utils/noise.glsl?raw";
 export class Earth extends BasePlanet {
   constructor(config, data, quality) {
     super(config, 4, quality);
+    this.atmosphere.material.uniforms.uColor.value.set("#469fef");
+    this.atmosphere.scale.setScalar(1.025);
     [...data.about.interests, ...data.about.languages].forEach((item) =>
       this.marker(item, "pin", "#c9f0dc", item, 0.055),
     );

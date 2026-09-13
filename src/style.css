@@ -1387,3 +1387,193 @@ dialog::backdrop {
     scroll-behavior: auto !important;
   }
 }
+
+/* Flight deck: restrained telemetry over the existing universe. */
+.flight-hud {
+  position: fixed;
+  z-index: 12;
+  left: 34px;
+  top: 96px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 13px 17px;
+  border: 1px solid #8ce7dc25;
+  border-radius: 12px;
+  background: #06131ccb;
+  backdrop-filter: blur(18px);
+  pointer-events: none;
+  transition: opacity 0.4s;
+}
+.flight-hud small {
+  display: block;
+  font: 9px monospace;
+  letter-spacing: 2px;
+  color: #779caa;
+  margin-bottom: 5px;
+}
+.flight-hud strong {
+  font-size: 12px;
+  font-weight: 400;
+  color: #d4ede9;
+}
+.flight-signal {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #8fffe0;
+  box-shadow: 0 0 14px #65ffdd80;
+}
+.flight-percent {
+  font: 9px monospace;
+  letter-spacing: 1px;
+  color: #8cd3c4;
+  margin-left: 12px;
+}
+.in-flight .flight-signal {
+  animation: flight-pulse 1s ease-in-out infinite;
+}
+.in-transit #planet-panel {
+  opacity: 0.15;
+  pointer-events: none;
+}
+#planet-panel {
+  transition:
+    transform 0.6s ease,
+    opacity 0.5s ease;
+}
+.flight-intro {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  pointer-events: none;
+  display: flex;
+  align-items: center;
+  padding: 8vw;
+  background: linear-gradient(90deg, #020611b0, transparent 75%);
+  border-top: 35px solid #02050b;
+  border-bottom: 35px solid #02050b;
+}
+.flight-intro p {
+  color: #8cddcf;
+  font: 10px monospace;
+  letter-spacing: 3px;
+}
+.flight-intro h2 {
+  color: #eef4fa;
+  font-size: clamp(38px, 6vw, 86px);
+  font-weight: 300;
+  line-height: 1.08;
+  letter-spacing: -3px;
+  margin: 25px 0;
+}
+.flight-intro span {
+  color: #99adbb;
+  font-size: 14px;
+  letter-spacing: 2px;
+}
+.flight-intro button {
+  pointer-events: auto;
+  position: absolute;
+  right: 5vw;
+  bottom: 25px;
+  padding: 13px 20px;
+  color: #d9eeec;
+  border: 1px solid #9be5d944;
+  border-radius: 30px;
+  background: #0b1b27;
+  cursor: pointer;
+}
+.cinematic-intro .intro,
+.cinematic-intro #identity-label,
+.cinematic-intro #labels,
+.cinematic-intro .flight-hud {
+  opacity: 0;
+}
+.list-mode .flight-hud {
+  display: none;
+}
+.focused .flight-hud {
+  top: auto;
+  bottom: 63px;
+}
+@keyframes flight-pulse {
+  50% {
+    opacity: 0.3;
+  }
+}
+@media (max-width: 760px) {
+  .flight-hud {
+    top: 73px;
+    left: 15px;
+    padding: 9px 12px;
+    gap: 8px;
+  }
+  .flight-hud small {
+    font-size: 8px;
+    letter-spacing: 1px;
+  }
+  .flight-hud strong {
+    font-size: 10px;
+  }
+  .flight-percent {
+    font-size: 8px;
+  }
+  .flight-intro {
+    align-items: flex-start;
+    padding-top: 20vh;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .flight-signal {
+    animation: none !important;
+  }
+}
+.flight-hud select { pointer-events: auto; color: #b9e1db; background: #10232e; border: 1px solid #85d5ca33; border-radius: 6px; padding: 6px; font: 10px monospace; max-width: 90px; }
+.flight-hud select:focus-visible { outline: 2px solid #8fffe0; outline-offset: 3px; }
+@media(max-width:760px) { .focused .flight-hud { top: 119px; bottom: auto; } .focused .flight-hud small { display: none; } .flight-percent { display: none; } }
+
+/* Exploration and story layers */
+.explorer-tools { position:fixed; z-index:15; right:34px; top:112px; display:flex; flex-wrap:wrap; align-items:center; gap:8px; max-width:420px; }
+.explorer-tools button,.tour-card button,.skill-evidence button { color:#cce7e3; background:#0c1c29; border:1px solid #8de3d32b; border-radius:8px; padding:9px 12px; font:inherit; font-size:13px; cursor:pointer; }
+.explorer-tools button:hover,.tour-card button:hover { background:#16303c; border-color:#82daca80; }
+.explorer-tools button:focus-visible,.tour-card button:focus-visible { outline:2px solid #91e6ce; outline-offset:3px; }
+.visited-count { font:12px monospace; color:#9bb3bd; }
+.explorer-status { flex-basis:100%; font-size:12px; color:#b9e9db; margin:0; max-width:360px; }
+.focused .explorer-tools { top:auto; bottom:18px; right:auto; left:34px; }
+.focused .flight-hud { bottom:120px; }
+.focused .bottom-interface { display:none; }
+.tour-card { position:fixed; z-index:16; left:34px; bottom:195px; width:min(345px,calc(100vw - 40px)); background:#0a1727ee; border:1px solid #77cecc40; border-radius:16px; padding:20px; backdrop-filter:blur(16px); box-shadow:0 18px 60px #0005; }
+.tour-card[hidden] { display:none; }
+.tour-card small { color:#8dd5c5; letter-spacing:2px; font-size:12px; }
+.tour-card strong { display:block; font-size:22px; margin-top:10px; }
+.tour-card p { font-size:14px; line-height:1.6; color:#aabccc; }
+.tour-card div { display:flex; flex-wrap:wrap; gap:7px; }
+.tour-card button:disabled { opacity:.35; cursor:default; }
+.destination.visited .nav-index { color:#8be0c1; }
+.destination.visited .nav-index::after { content:' ✓'; }
+.project-cover,.case-image { width:100%; aspect-ratio:16/10; object-fit:cover; border-radius:12px; margin-bottom:18px; }
+.case-facts { display:flex; gap:32px; padding:20px 0; border-block:1px solid #ffffff18; }
+.case-facts small,.case-facts strong { display:block; }
+.case-facts small { color:#9cb6c6; margin-bottom:8px; }
+.case-section { margin:28px 0; }
+.case-section h3 { font-size:18px; }
+.skill-evidence { margin:-8px 0 25px; display:flex; gap:8px; flex-wrap:wrap; }
+.skill-evidence small { flex-basis:100%; color:#99b8c7; font-size:12px; }
+.bio,.modal-body p,.timeline li,.project-desc { font-size:16px; line-height:1.7; }
+.timeline details { border-left:1px solid #db997044; padding-left:18px; }
+.timeline summary strong { color:#e3bb9a; }
+.cinematic-intro .explorer-tools { visibility:hidden; }
+@media(max-width:760px) {
+ .explorer-tools { left:16px; right:16px; top:auto; bottom:170px; gap:6px; }
+ .explorer-tools button { font-size:12px; padding:8px; }
+ .focused .explorer-tools { top:auto; bottom:8px; left:12px; right:12px; background:#0d1725f5; padding:7px; border-radius:10px; }
+ .focused .flight-hud { top:119px; bottom:auto; }
+ .focused .panel-content { padding-bottom:100px; }
+ .tour-card { left:16px; bottom:65px; padding:14px; }
+ .tour-card strong { font-size:18px; }
+ .tour-card p { margin:8px 0; }
+ .visited-count { font-size:11px; }
+ .explorer-status:empty { display:none; }
+}
+@media(prefers-reduced-motion:reduce) { *,*::before,*::after { scroll-behavior:auto !important; } }

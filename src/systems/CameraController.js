@@ -67,7 +67,7 @@ export class CameraController {
     return { position, target };
   }
   fly(planet, onComplete) {
-    if (!this.focused) {
+    if (!this.focused && !this.saved) {
       this.saved = {
         position: this.camera.position.clone(),
         target: this.controls.target.clone(),
@@ -77,12 +77,7 @@ export class CameraController {
     const frame = this.frame(planet);
     this.controls.minDistance = planet.radius * 1.7;
     this.controls.maxDistance = frame.position.distanceTo(frame.target) * 2.5;
-    this.animate(
-      frame.position,
-      frame.target,
-      planet.id === "neptune" || planet.id === "saturn" ? 1.4 : 1.2,
-      onComplete,
-    );
+    this.animate(frame.position, frame.target, 2.6, onComplete);
   }
   back(onComplete) {
     this.focused = null;
@@ -92,7 +87,10 @@ export class CameraController {
       position: new THREE.Vector3(0, 65, 72),
       target: new THREE.Vector3(),
     };
-    this.animate(saved.position, saved.target, 1.2, onComplete);
+    this.animate(saved.position, saved.target, 2.2, () => {
+      this.saved = null;
+      onComplete?.();
+    });
   }
   animate(end, target, duration, onComplete) {
     this.tween?.kill();
@@ -110,13 +108,20 @@ export class CameraController {
       "centripetal",
     );
     const progress = { t: 0 };
+    const journey = this.journey;
+    this.journey = null;
     this.tween = gsap.to(progress, {
       t: 1,
       duration: this.quality.reduced ? 0.01 : duration,
       ease: "power2.inOut",
       onUpdate: () => {
+        journey?.(progress.t);
         this.camera.position.copy(curve.getPointAt(progress.t));
         this.controls.target.copy(look).lerp(target, progress.t);
+        if (journey && this.visitor && !this.quality.reduced) {
+          const weight = Math.sin(Math.PI * progress.t) * 0.32;
+          this.controls.target.lerp(this.visitor.group.position, weight);
+        }
         this.camera.lookAt(this.controls.target);
       },
       onComplete: () => {

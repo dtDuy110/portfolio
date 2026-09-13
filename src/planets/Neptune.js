@@ -28,9 +28,17 @@ export class Neptune extends BasePlanet {
       };
     });
     this.focusRadius = this.radius * 3.6;
+    this.satelliteGuides = new THREE.Group();
+    for (const moon of this.moons) {
+      const points = new THREE.EllipseCurve(0, 0, moon.distance, moon.distance).getPoints(100).map((p) => new THREE.Vector3(p.x, 0, p.y));
+      this.satelliteGuides.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints(points), new THREE.LineBasicMaterial({ color: "#64d8ed", transparent: true, opacity: 0.12, depthWrite: false })));
+    }
+    this.group.add(this.satelliteGuides);
+    this.satelliteGuides.visible = false;
   }
   focus(active) {
     super.focus(active);
+    this.satelliteGuides.visible = active;
     this.moons.forEach((m) => (m.mesh.visible = true));
   }
   update(time, delta) {

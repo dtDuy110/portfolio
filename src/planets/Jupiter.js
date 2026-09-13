@@ -19,9 +19,11 @@ export class Jupiter extends BasePlanet {
           theta,
           height + 0.003,
         ),
-        this.material,
+        this.material.clone(),
       );
       theta += height;
+      band.material.uniforms.uColor.value.set(skill.bandColor);
+      this.materials.push(band.material);
       band.userData = {
         destination: this.id,
         type: "skill",
@@ -36,12 +38,13 @@ export class Jupiter extends BasePlanet {
   }
   focus(active, reduced = false) {
     this.focused = active;
-    this.bands.forEach((band, i) =>
+    this.bands.forEach((band, i) => {
+      gsap.killTweensOf(band.position);
       gsap.to(band.position, {
-        y: active ? (1.5 - i) * 0.6 : 0,
+        y: active ? ((this.bands.length - 1) / 2 - i) * 0.6 : 0,
         duration: reduced ? 0 : 0.8,
         ease: "power2.inOut",
-      }),
-    );
+      });
+    });
   }
 }

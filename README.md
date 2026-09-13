@@ -31,3 +31,19 @@ Planet classes live in `src/planets`, shaders in `src/shaders`, camera/orbit/pic
 Desktop budgets: 8,000 stars, DPR ≤1.75, shared geometry where appropriate, no shadow maps or postprocessing. Mobile: 3,000 stars, DPR ≤1.25, reduced sphere resolution and a bottom-sheet interface. Sustained slow frames lower DPR to 1.
 
 Deployment is static. A configured external contact endpoint must permit the deployed origin. The repository does not contain any secrets.
+
+## Exploration upgrade
+
+The guided tour is visitor-paced and can be exited at any point. Sound starts off and is generated locally with Web Audio, without external audio requests. Visiting all six destinations unlocks an explorer-log message. Share routes use `#/earth` and `#/neptune/spacetracker`; unknown destinations are ignored. Progress is session-only.
+
+### Replace sample stories
+
+Keep `demo: true` until the sample companies, credentials and experience have been replaced. Each project supports optional `image` (local asset path), `role`, `year`, `challenge`, `approach` and `outcome` fields. Put real screenshots in `public/` and reference them with a leading slash. Empty optional fields stay hidden. Skills link to projects by matching stack names.
+
+### Contact delivery
+
+Set `contact.email` for an email-app draft, or `contact.endpoint` for an HTTPS JSON POST accepting `name`, `email`, `message`. The receiver must validate input, rate-limit requests, and return success only after accepting delivery. Never put API secrets in portfolio.json. Until a real recipient or endpoint is supplied, the form explicitly remains an unsent demo. Contact details are not saved in browser storage.
+
+### Release checks
+
+Run build and tests; verify first-visit intro, rapid destination changes, browser Back/Forward, project share links, tour exit, audio off/hidden tab, keyboard navigation, portrait layouts and reduced motion on target devices before a public launch. Real project imagery/content and contact delivery require owner-provided data.

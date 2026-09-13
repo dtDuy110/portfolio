@@ -20,6 +20,8 @@ import { ParticleField } from "./systems/ParticleField.js";
 import { RaycastManager } from "./systems/RaycastManager.js";
 import { ContactLaunchSystem } from "./systems/ContactLaunchSystem.js";
 import { VisitorShip } from "./systems/VisitorShip.js";
+import { FlightExperience } from "./ui/FlightExperience.js";
+import { ExplorerTools } from "./ui/ExplorerTools.js";
 import { LifecycleManager } from "./systems/LifecycleManager.js";
 import { AssetManager } from "./systems/AssetManager.js";
 import { IdentityStar } from "./planets/IdentityStar.js";
@@ -48,6 +50,8 @@ let renderer,
   labels,
   launch,
   visitor,
+  experience,
+  explorer,
   star,
   planets = [],
   hidden = document.hidden,
@@ -65,6 +69,7 @@ const contact = new ContactForm(data.contact, () => {
 });
 const panel = new PlanetPanel(data, selectItem, (form) => contact.bind(form));
 modal.onClose = () => {
+  if (state.destination) explorer?.write(state.destination);
   planets.forEach((p) =>
     p.targets.forEach((t) => (t.userData.selected = false)),
   );
@@ -82,12 +87,14 @@ function setActive(id) {
   });
 }
 function selectDestination(id) {
+  experience?.skip();
   if (id === "star") {
     goBack();
     return;
   }
   const config = destinations.find((p) => p.id === id);
   if (!config) return;
+  explorer?.write(id);
   returnFocus = document.activeElement;
   modal.close();
   tooltip.hide();
@@ -126,8 +133,13 @@ function selectDestination(id) {
       star.dim(1 - dim.t * 0.7);
     },
   });
-  visitor.visit(selected, selected.id === "neptune" || selected.id === "saturn" ? 1.4 : 1.2);
+  visitor.visit(
+    selected,
+    selected.id === "neptune" || selected.id === "saturn" ? 1.4 : 1.2,
+  );
+  experience.begin(config.name);
   controller.fly(selected, () => {
+    experience.arrive(config.name);
     state.set("focus", id);
     raycaster.disabled = listMode;
     document.querySelector("#panel-title").focus({ preventScroll: true });
@@ -139,6 +151,8 @@ function goBack() {
     return;
   }
   if (!state.destination) return;
+  explorer?.write(null);
+  explorer?.exit();
   state.set("flying-out");
   tooltip.hide();
   panel.hide();
@@ -159,7 +173,9 @@ function goBack() {
   });
   star.dim(1);
   visitor.back();
+  experience.begin("Home star");
   controller.back(() => {
+    experience.arrive("Home star");
     state.set("overview", null);
     orbits.focused = false;
     raycaster.disabled = listMode;
@@ -171,6 +187,11 @@ function goBack() {
   });
 }
 function selectItem(hit) {
+  if (hit.type === "related-project") {
+    if (explorer) explorer.pending = hit.itemId;
+    selectDestination("neptune");
+    return;
+  }
   if (!hit.itemId && hit.type !== "ring") {
     selectDestination(hit.destination);
     return;
@@ -190,6 +211,7 @@ function selectItem(hit) {
             (t) => (t.userData.selected = t.userData.itemId === hit.itemId),
           );
         modal.project(p);
+        explorer?.write("neptune", p.id);
         state.set("detail");
       }
       break;
@@ -245,6 +267,9 @@ function selectItem(hit) {
   }
 }
 function fallback(error) {
+  experience?.skip();
+  experience?.hud.remove();
+  document.body.classList.remove("in-transit");
   console.error("Universe renderer unavailable:", error);
   failed = true;
   listMode = true;
@@ -279,6 +304,7 @@ document
 document.querySelector("#back").addEventListener("click", goBack);
 document.querySelector(".panel-close").addEventListener("click", goBack);
 document.addEventListener("keydown", (event) => {
+  if (event.key === "Escape") experience?.skip();
   if (event.key === "Escape" && !modal.isOpen) goBack();
 });
 function updateMotionButton() {
@@ -293,6 +319,7 @@ document.querySelector("#motion-toggle").addEventListener("click", () => {
 });
 updateMotionButton();
 function toggleList() {
+  experience?.skip();
   listMode = !listMode;
   document.body.classList.toggle("list-mode", listMode);
   document.querySelector("#list-view").hidden = !listMode;
@@ -332,6 +359,11 @@ try {
   controller = new CameraController(camera, canvas, quality);
   launch = new ContactLaunchSystem(scene);
   visitor = new VisitorShip(scene, quality);
+  visitor.obstacles = [star, ...planets].map((p) => ({
+    position: p.position,
+    radius: p.id === "saturn" ? p.focusRadius + 0.25 : p.radius + 0.25,
+  }));
+  experience = new FlightExperience(controller, visitor, quality, selectDestination);
   labels = new LabelManager(planets, camera, selectDestination);
   raycaster = new RaycastManager(canvas, camera, planets, star, {
     select: selectItem,
@@ -348,6 +380,9 @@ try {
   await new AssetManager().prepare(renderer, scene, camera, loading);
   loading.finish();
   state.set("overview", null);
+  experience.intro();
+  explorer = new ExplorerTools(data, selectDestination, () => { modal.close(); goBack(); }, (id) => selectItem({ type: "project", itemId: id }));
+  if (location.hash.startsWith("#/")) explorer.restore();
   new LifecycleManager(canvas, {
     resize: () => {
       renderer.setSize(innerWidth, innerHeight);
@@ -357,8 +392,10 @@ try {
       hidden = value;
       previous = 0;
       if (hidden) {
+        controller.tween?.pause();
         cancelAnimationFrame(frameId);
       } else if (!failed) {
+        controller.tween?.resume();
         frameId = requestAnimationFrame(animate);
       }
     },
@@ -398,6 +435,7 @@ try {
     () => {
       cancelAnimationFrame(frameId);
       controller.controls.dispose();
+      controller.tween?.kill();
       scene.traverse((object) => {
         object.geometry?.dispose();
         const materials = Array.isArray(object.material)

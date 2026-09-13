@@ -3,6 +3,10 @@ import { BasePlanet } from "./BasePlanet.js";
 export class Moon extends BasePlanet {
   constructor(config, data, quality) {
     super(config, 6, quality);
+    this.station = new THREE.Mesh(new THREE.TorusGeometry(this.radius * 0.25, 0.015, 8, 32), new THREE.MeshBasicMaterial({ color: "#8ef5de" }));
+    this.station.position.set(0, this.radius * 1.01, 0);
+    this.station.rotation.x = Math.PI / 2;
+    this.group.add(this.station);
     const points = [];
     Object.entries(data.contact.socials)
       .filter(([, url]) => url)

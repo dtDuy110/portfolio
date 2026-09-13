@@ -26,6 +26,32 @@ export class PlanetPanel {
     this.element.querySelector(".panel-description").textContent =
       config.description;
     this.content.innerHTML = this.render(config.id);
+    this.content.scrollTop = 0;
+    if (config.id === "neptune") {
+      this.content.querySelectorAll(".project-card").forEach((card, index) => {
+        const source = safeAsset(this.data.projects[index].image || "");
+        if (!source) return;
+        const image = document.createElement("img");
+        image.src = source;
+        image.alt = `${this.data.projects[index].name} preview`;
+        image.loading = "lazy";
+        image.className = "project-cover";
+        card.querySelector(".project-art").replaceWith(image);
+      });
+    }
+    if (config.id === "jupiter") {
+      this.content.querySelectorAll(".skill-track").forEach((el) => el.remove());
+      this.content.querySelectorAll(".skill-card").forEach((card, index) => {
+        const skill = this.data.skills[index];
+        const related = this.data.projects.filter((project) => project.stack.some((tech) => skill.items.includes(tech)));
+        if (related.length) {
+          const links = document.createElement("div");
+          links.className = "skill-evidence";
+          links.innerHTML = '<small>EXPLORE THE WORK</small>' + related.map((p) => `<button data-item="${e(p.id)}" data-type="related-project">${e(p.name)} ↗</button>`).join("");
+          card.after(links);
+        }
+      });
+    }
     this.element.classList.add("open");
     this.element.inert = false;
     this.element.setAttribute("aria-hidden", "false");

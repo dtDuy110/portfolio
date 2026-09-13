@@ -12,7 +12,10 @@ export function createScene(canvas, quality) {
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
   renderer.toneMappingExposure = 1.35;
   const scene = new THREE.Scene();
-  scene.add(new THREE.AmbientLight("#b9cce7", 1.5));
+  scene.add(new THREE.AmbientLight("#b9cce7", 0.85));
+  const fill = new THREE.DirectionalLight("#6bbbdc", 1.3);
+  fill.position.set(10, 6, -15);
+  scene.add(fill);
   const key = new THREE.DirectionalLight("#fff0d5", 2);
   key.position.set(-12, 20, 22);
   scene.add(key);
